@@ -36,7 +36,8 @@ chrome.tabs.onCreated.addListener( function(tab) {
     "fromid":tab.openerTabId,
     "url":tab.url, 
     "title":tab.title,
-    "removed":false
+    "removed":false,
+    "marked":false
   }
   );
   // console.log(y + " : " + tab + " : " + tab.id + " : " + tab.openerTabId + " : " + tab.url + " : " + tab.title);
@@ -82,7 +83,7 @@ chrome.commands.onCommand.addListener(function(command) {
 });
 
 
-function hash(obj) {
+function hash(obj) {  
 
 }
 
@@ -161,6 +162,8 @@ function nestData() {
 
   });
 
+
+
   
 
   /*
@@ -169,6 +172,102 @@ function nestData() {
       //write function such that tabid's childrens' values matches openertabid
     })
   */
+}
+
+
+/** 
+  * Called when user triggers keyboard command
+  * Takes raw json tab array and puts it in hierarchy
+  *
+  * Algorithm:
+  *   // initialize
+  *   Iterate t each tab object until I find a tab "t" that has no parent O(n)
+  *     Mark that tab complete, insert into JSON data structure
+  *     search for tabs that have the same fromid as "t"'s tabid O(n)
+  *     add to parent ()
+  // at this point, each tree will have been started. so build bottom up, find childrens' parents instead of parents' children
+  *   Iterate through each tab, seeing if tabs have parents in the structure and then adding them..very time expensive tho
+  *     (keep array of tabs that have been added to the json ds) if in here- then proceed to find and add
+  * 
+  */
+function nest() {
+  var raw_json_obj = JSON.parse(x().stringify());    // raw array of tab object
+  var new_json = {};
+  // initialize
+  for (var parent in raw_json_obj) {
+    // for each tab
+    if (parent.fromid == undefined) {  // fix defitnition of <not a number>
+      // if the tab has no parent
+      mark(parent);                    // implement mark(tab)
+      for (var tab2 in raw_json_obj) {
+        if (parent.tabid == tab2.fromid) {
+          addToParent(new_json, parent, tab2);
+          mark(tab2);
+        }
+      }
+    }
+  }
+
+  var count = 0;
+
+  // finish up rest
+  for (var arbtab in raw_json_obj) {
+    while (count != raw_json_obj.length) {
+      // count how many tabs have been inserted, stop checking over list until this condition is satisfied
+      if (!isMarked(arbtab) && isMarked(getParent(arbtab))) {  
+      // implement isMarked(tab)
+      // implement getParent(tab)
+        // if the current tab hasn't been visited and its parent has, then its a direct link, easy to attach
+        addToParent(new_json, getParent(arbtab), arbtab);
+      }
+    }
+  }
+}
+
+// marks tab (usually as visited) (generally utilized when creating nest)
+function mark(tab) {
+  if (!tab.marked)
+    tab.marked = true;
+  else
+    console.log("tab marked ");
+}
+
+// checks if tab is marked
+function isMarked(tab) {
+  return (tab.marked);
+}
+
+// gets parent Tab object, returns -1 if there is no tab id
+function getParent(tab, raw_json_obj) {
+  var from = tab.fromid;
+  for (parent in raw_json_obj) {
+    if (parent.id == from)
+      return parent;
+  }
+  return -1;
+}
+
+/**
+  * Called by nest() method. Controls inserting an element as a child to a parent.
+  * 2 cases
+  *   parent doesn't exist
+  *   parent is nested
+  *
+  * in json   Current JSON tree
+  * in parent Tab object
+  * in child  Tab object
+  *
+  * out json
+  */
+function addToParent(json, parent, child) {
+
+  var parent_tab = new_json.searchForTabWithID(parent.id);  // implement me
+
+  if (parent_tab != 0)                              // google js und
+    parent_tab.children.push(child);
+  else
+    console.log("Tried to add undefined tab to JSON Tree data structure");
+
 }
 
 

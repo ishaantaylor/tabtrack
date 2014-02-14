@@ -2,6 +2,7 @@
   "manifest_version": 2,
   "name": "Tab Trak",
   "version": "0.0.1",
+  "author":"Ishaan Taylor",
   
   "browser_action": {
     "default_icon": {
