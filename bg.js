@@ -12,6 +12,8 @@ var nested_data = {};
  *      "fromid":   id of opener tab
  *      "url":      url of tab
  *      "title":    tab page title
+ *			"marked": 	boolean
+ *			"children": array of children for d3 specs
  * }
  * 
  */
