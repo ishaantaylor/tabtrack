@@ -273,7 +273,7 @@ function addToParent(json, parent, child) {
 */
 
 
-
+// Queue object to hold tabs when nesting
 function Queue(stuff) {
   this.items = stuff;
   
@@ -340,7 +340,7 @@ function addToParent(json, parent, child) {
   else if (parent_tab === undefined) {
     //insert into json, first level
   } else {
-    
+    console.log("summat is messed up");
   }
 }
 
