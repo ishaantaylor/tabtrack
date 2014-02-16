@@ -291,7 +291,10 @@ function Queue(stuff) {
   };
   
   Queue.prototype.peek = function() {
-    return items[0];
+    if (items.length > 0)
+    	return items[0];
+    else
+    	return undefined;
   };
 }
 
@@ -300,14 +303,7 @@ function nestReal() {
   var count = 0;
   var q = new Queue();
   var json = [];
-  var tree_level = 0; // create array per level, make it kind of like a heap in that the children are 'under" the correct spot so when stitching up the tree I can just make a"tree_level" passes (will be linear)
-  /*
-  [1,2]
-  [3,4,5, 6]
-  [7,8,9,10,11,12,13]
-  
-  1 (3,4) (7,8,9,10) is a branch for example....
-  */
+
   // initialize queue
   for (tab in raw_json_obj) {
     if (tab.fromid == -1) {       //figure out if we use -1 or underfined
@@ -319,14 +315,13 @@ function nestReal() {
   while (count < raw_json_obj.length && q.peekk() != undefined) {               // coud also do while queue is not empty maybe
     var parent = q.popp();                            // get first tab in queue
     if (parent.fromid === undefined)
-    	json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with
+    	json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with 
     var children = x({"fromid": {is:parent.id}});     // get children of parent from db
     for (tab in children) {                           // for each child to the original parent
       q.pushh(tab);                                   // add children to queue
       count++;                                        // increment count to know where i'm at
       json = addToParent(json, parent, tab);          //merge with other file to implement
     }
-    tree_level++;
   }
   return json;
 }
