@@ -93,7 +93,7 @@ function hash(obj) {
   *
   * @param  raw   string
   * @return json  useful data
-  **/
+  **
 function nestData() {
   var raw_json_obj = JSON.parse(x().stringify());
   console.log(x().stringify());
@@ -132,6 +132,7 @@ function nestData() {
                 [5]
               ]
   */
+  /*
   for (var ob1 in raw_json_obj) {           // for each element in data
     temp_adj_list.push(ob1.tabid);          // store element, first element in each array in a of a is the root tabs id
     for (var ob2 in raw_json_obj) {         // for each other element in data
@@ -151,6 +152,7 @@ function nestData() {
       of each tab to create an adjacency list (array of arrays)
   */
 
+  /*
   var adj = [];
   //waht am idoing her make each adjindex array index:adj_index[0]
   for (var i = 0; i < adj_index.length; i++) {
@@ -172,8 +174,8 @@ function nestData() {
     .key( function(d) {
       //write function such that tabid's childrens' values matches openertabid
     })
-  */
-}
+  
+} */
 
 
 /** 
