@@ -272,13 +272,84 @@ function addToParent(json, parent, child) {
 
 
 
+Queue : function(stuff) {
+  this.items = stuff;
+  
+  this.pushh = function(item) {
+    if (typeof(items) === 'undefined') {
+      items = [];  
+    }
+    items.push(item);
+  }
+  
+  this.popp = function() {
+    return items.shift();
+  }
+  
+  this.peek = function() {
+    return items[0];
+  }
+}
 
 
+function nest() {
+  var count = 0;
+  var q = new Queue();
+  var json = {};
+  var tree_level = 0; // create array per level, make it kind of like a heap in that the children are 'under" the correct spot so when stitching up the tree I can just make a"tree_level" passes (will be linear)
+  /*
+  [1,2]
+  [3,4,5, 6]
+  [7,8,9,10,11,12,13]
+  
+  1 (3,4) (7,8,9,10) is a branch for example....
+  */
+  // initialize queue
+  for (tab in raw_json_obj) {
+    if (tab.fromid == -1) {       //figure out if we use -1 or underfined
+      q.pushh(tab);
+      count++;                    // increment count to know where i'm
+    } 
+  }
+  
+  
+  while (count < raw_json_obj.length && q.peekk() != undefined) {               // coud also do while queue is not empty maybe
+    var parent = q.popp();                            // get first tab in queue
+    json = addToParent(json, parent, child);          //figure this out, implement cases for both nodes without parent and with
+    var children = x({"fromid": {is:parent.id}});     // get children of parent from db
+    for (tab in children) {                           // for each child to the original parent
+      q.pushh(tab);                                   // add children to queue
+      count++;                                        // increment count to know where i'm at
+      json = addToParent(json, parent, tab);          //merge with other file to implement
+    }
+    tree_level++;
+  }
+  
+  return json;
+}
 
 
+function addToParent(json, parent, child) {
+  var parent_tab = searchForTabWithID(json, parent.id);  // implement me
+  var child_tab  = searchForTabWithID(json, child.id);
+
+  if (parent_tab != 0)                              // google js und
+    parent_tab.children.push(child);
+  else
+    console.log("Tried to add undefined tab to JSON Tree data structure");
+
+  if (parent_tab === undefined) {
+    //insert into json, first level
+  } else {
+    
+  }
+}
 
 
-
+function searchForTabWithID(json, id) {
+  if (id === undefined)
+    return undefined;
+}
 
 
 
