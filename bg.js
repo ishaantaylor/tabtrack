@@ -343,7 +343,7 @@ function addToParent(json, parent, child) {
     console.log("summat is messed up");
   }
 }
-
+   
 
 function searchForTabWithID(json, id) {
   if (id === undefined)             // if tab id doesnt exist, return undefined
