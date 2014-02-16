@@ -316,13 +316,10 @@ function nestReal() {
     } 
   }
   
-  
   while (count < raw_json_obj.length && q.peekk() != undefined) {               // coud also do while queue is not empty maybe
     var parent = q.popp();                            // get first tab in queue
     if (parent.fromid === undefined)
     	json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with
-    
-
     var children = x({"fromid": {is:parent.id}});     // get children of parent from db
     for (tab in children) {                           // for each child to the original parent
       q.pushh(tab);                                   // add children to queue
@@ -331,22 +328,21 @@ function nestReal() {
     }
     tree_level++;
   }
-  
   return json;
 }
 
 
 function addToParent(json, parent, child) {
-  if (child === undefined)
+  if (child === undefined) {
   	json.push(parent);
-
-  var parent_tab = searchForTabWithID(json, parent.id);  // implement me
-  var child_tab  = searchForTabWithID(json, child.id);
-
-  if (parent_tab != undefined)                           // google js und
-    parent_tab.children.push(child_tab);
-
+  } else {
+	  var parent_tab = searchForTabWithID(json, parent.id);  // implement me
+	  var child_tab  = searchForTabWithID(json, child.id);
+	  if (parent_tab != undefined)                           
+	    parent_tab.children.push(child_tab);
+	}
 }
+
 
 
 function searchForTabWithID(json, id) {
