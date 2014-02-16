@@ -317,7 +317,7 @@ function nest() {
   
   while (count < raw_json_obj.length && q.peekk() != undefined) {               // coud also do while queue is not empty maybe
     var parent = q.popp();                            // get first tab in queue
-    json = addToParent(json, parent, child);          //figure this out, implement cases for both nodes without parent and with
+    json = addToParent(json, parent, child);          //THIS IS WRONG. fix this.... the child and parent thing should be different....figure this out, implement cases for both nodes without parent and with
     var children = x({"fromid": {is:parent.id}});     // get children of parent from db
     for (tab in children) {                           // for each child to the original parent
       q.pushh(tab);                                   // add children to queue
@@ -338,6 +338,7 @@ function addToParent(json, parent, child) {
   if (parent_tab != undefined)                              // google js und
     parent_tab.children.push(child_tab);
   else if (parent_tab === undefined) {
+    json.push(parent_tab);
     //insert into json, first level
   } else {
     
