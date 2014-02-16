@@ -275,6 +275,8 @@ function addToParent(json, parent, child) {
 
 
 function Queue(stuff) {
+  var items;
+
   this.items = stuff;
   
   Queue.prototype.pushh = function(item) {
@@ -294,10 +296,10 @@ function Queue(stuff) {
 }
 
 
-function nest() {
+function nestReal() {
   var count = 0;
   var q = new Queue();
-  var json = {};
+  var json = [];
   var tree_level = 0; // create array per level, make it kind of like a heap in that the children are 'under" the correct spot so when stitching up the tree I can just make a"tree_level" passes (will be linear)
   /*
   [1,2]
@@ -317,7 +319,10 @@ function nest() {
   
   while (count < raw_json_obj.length && q.peekk() != undefined) {               // coud also do while queue is not empty maybe
     var parent = q.popp();                            // get first tab in queue
-    json = addToParent(json, parent, child);          //THIS IS WRONG. fix this.... the child and parent thing should be different....figure this out, implement cases for both nodes without parent and with
+    if (parent.fromid === undefined)
+    	json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with
+    
+
     var children = x({"fromid": {is:parent.id}});     // get children of parent from db
     for (tab in children) {                           // for each child to the original parent
       q.pushh(tab);                                   // add children to queue
@@ -332,17 +337,15 @@ function nest() {
 
 
 function addToParent(json, parent, child) {
+  if (child === undefined)
+  	json.push(parent);
+
   var parent_tab = searchForTabWithID(json, parent.id);  // implement me
   var child_tab  = searchForTabWithID(json, child.id);
 
-  if (parent_tab != undefined)                              // google js und
+  if (parent_tab != undefined)                           // google js und
     parent_tab.children.push(child_tab);
-  else if (parent_tab === undefined) {
-    json.push(parent_tab);
-    //insert into json, first level
-  } else {
-    
-  }
+
 }
 
 
