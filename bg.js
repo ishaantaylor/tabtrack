@@ -359,7 +359,7 @@ function searchForTabWithID(json, id) {
   		searchForTabWithID(json[i].children, id);
   																	// recurse
   }
-}
+} 
 
 
 
