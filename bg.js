@@ -37,7 +37,8 @@ chrome.tabs.onCreated.addListener( function(tab) {
     "url":tab.url, 
     "title":tab.title,
     "removed":false,
-    "marked":false
+    "marked":false,
+    "children": {}
   }
   );
   // console.log(y + " : " + tab + " : " + tab.id + " : " + tab.openerTabId + " : " + tab.url + " : " + tab.title);
@@ -258,7 +259,7 @@ function getParent(tab, raw_json_obj) {
   * in child  Tab object
   *
   * out json
-  */
+  *
 function addToParent(json, parent, child) {
 
   var parent_tab = new_json.searchForTabWithID(parent.id);  // implement me
@@ -269,26 +270,27 @@ function addToParent(json, parent, child) {
     console.log("Tried to add undefined tab to JSON Tree data structure");
 
 }
+*/
 
 
 
-Queue : function(stuff) {
+function Queue(stuff) {
   this.items = stuff;
   
-  this.pushh = function(item) {
+  Queue.prototype.pushh = function(item) {
     if (typeof(items) === 'undefined') {
       items = [];  
     }
     items.push(item);
-  }
+  };
   
-  this.popp = function() {
+  Queue.prototype.popp = function() {
     return items.shift();
-  }
+  };
   
-  this.peek = function() {
+  Queue.prototype.peek = function() {
     return items[0];
-  }
+  };
 }
 
 
@@ -333,12 +335,9 @@ function addToParent(json, parent, child) {
   var parent_tab = searchForTabWithID(json, parent.id);  // implement me
   var child_tab  = searchForTabWithID(json, child.id);
 
-  if (parent_tab != 0)                              // google js und
-    parent_tab.children.push(child);
-  else
-    console.log("Tried to add undefined tab to JSON Tree data structure");
-
-  if (parent_tab === undefined) {
+  if (parent_tab != undefined)                              // google js und
+    parent_tab.children.push(child_tab);
+  else if (parent_tab === undefined) {
     //insert into json, first level
   } else {
     
@@ -347,8 +346,19 @@ function addToParent(json, parent, child) {
 
 
 function searchForTabWithID(json, id) {
-  if (id === undefined)
+  if (id === undefined)             // if tab id doesnt exist, return undefined
     return undefined;
+
+  if (json.id == id)                // if tab is the object, return it
+  	return json;
+
+  for (var i in json) {             // for each field in json
+  	if (json.children[i].id == id)  // if the id of the field is the correct id (fix bug)
+  		return json;
+  	if (json[i].children !== null && typeof(json[i]) == "object")
+  		searchForTabWithID(json[i].children, id);
+  																	// recurse
+  }
 }
 
 
