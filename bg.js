@@ -55,7 +55,7 @@ chrome.tabs.onCreated.addListener( function(tab) {
   **/
 chrome.tabs.onUpdated.addListener( function(tab) {
   var tab_record = x({"tabid":tab.id});       // tab to be updated
-  tab_record.update({"tab":tab, "url":tab.url, "title":tab.title})
+  tab_record.update({"tab":tab, "url":tab.url, "title":tab.title});
   // console.log(tab.id, tab.url);
 });
 
@@ -194,14 +194,14 @@ function nestData() {
   *   Iterate through each tab, seeing if tabs have parents in the structure and then adding them..very time expensive tho
   *     (keep array of tabs that have been added to the json ds) if in here- then proceed to find and add
   * 
-  */
+  *
 function nest() {
   var raw_json_obj = JSON.parse(x().stringify());    // raw array of tab object
   var new_json = {};
   // initialize
   for (var parent in raw_json_obj) {
     // for each tab
-    if (parent.fromid == undefined) {  // fix defitnition of <not a number>
+    if (parent.fromid === undefined) {  // fix defitnition of <not a number>
       // if the tab has no parent
       mark(parent);                    // implement mark(tab)
       for (var tab2 in raw_json_obj) {
@@ -242,15 +242,19 @@ function isMarked(tab) {
   return (tab.marked);
 }
 
+
+
 // gets parent Tab object, returns -1 if there is no tab id
 function getParent(tab, raw_json_obj) {
   var from = tab.fromid;
-  for (parent in raw_json_obj) {
+  for (var parent in raw_json_obj) {
     if (parent.id == from)
       return parent;
   }
   return -1;
 }
+*/
+
 
 /**
   * Called by nest() method. Controls inserting an element as a child to a parent.
@@ -299,7 +303,7 @@ function Queue(stuff) {
     	return items[0];
     else
     	return undefined;
-  };
+  }
 }
 
 
@@ -309,22 +313,22 @@ function nestReal() {
   var json = [];
 
   // initialize queue
-  for (tab in raw_json_obj) {
-    if (tab.fromid == -1) {       //figure out if we use -1 or underfined
+  for (var tab in raw_json_obj) {
+    if (tab.fromid === undefined) {       //figure out if we use -1 or underfined
       q.pushh(tab);
       count++;                    // increment count to know where i'm
     } 
   }
   
-  while (count < raw_json_obj.length && q.peekk() != undefined) {               // coud also do while queue is not empty maybe
+  while (count < raw_json_obj.length && q.peekk() != undefined) {               // could also do while queue is not empty maybe
     var parent = q.popp();                            // get first tab in queue
     if (parent.fromid === undefined)
     	json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with 
     var children = x({"fromid": {is:parent.id}});     // get children of parent from db
-    for (tab in children) {                           // for each child to the original parent
-      q.pushh(tab);                                   // add children to queue
-      count++;                                        // increment count to know where i'm at
-      json = addToParent(json, parent, tab);          //merge with other file to implement
+    for (var child in children) {                     // for each child to the original parent
+      q.pushh(child);                                   // add children to queue
+      count++;                                          // increment count to know where i'm at
+      json = addToParent(json, parent, child);          //merge with other file to implement
     }
   }
   return json;
@@ -337,7 +341,7 @@ function addToParent(json, parent, child) {
   } else {
 	  var parent_tab = searchForTabWithID(json, parent.id);  // implement me
 	  var child_tab  = searchForTabWithID(json, child.id);
-	  if (parent_tab != undefined)                           
+	  if (parent_tab !== undefined)                           
 	    parent_tab.children.push(child_tab);
 	}
 }
@@ -359,12 +363,3 @@ function searchForTabWithID(json, id) {
   																	// recurse
   }
 }
-
-
-
-
-
-
-
-
-
