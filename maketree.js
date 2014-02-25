@@ -40,40 +40,6 @@ chrome.browserAction.onClicked.addListener( function(tab) {
 });
 */
 
-
-var diameter = 960;
-var margin = {
-  top: 20,
-  right: 80,
-  bottom: 20,
-  left: 80
-},
-width = 960 - margin.right - margin.left,
-height = 800 - margin.top - margin.bottom;
-var tree = d3.layout.tree()
-  .size([height, width]);
-  /*
-  .separation(function(a,b){
-    return (a.parent == b.parent ? 1 : 2) / a.depth;
-  });
-  */
-var diagonal = d3.svg.diagonal()
-  .projection(function (d) {
-    return [d.y, d.x];
-  });
-svg = d3.select("#node").append("svg")
-  .attr("width", width + margin.right + margin.left)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-var root = x().stringify();                // place where json is incepted;;; create and IMPORT JSONwith file, 
-root.x0 = height/2;
-root.y0 = 0;
-var zb = d3.behavior.zoom().scaleExtent([0.5,5]).on("zoom", function () {
-  zoom();
-});
-zb.translate([margin.left, margin.top]);
-  
 function collapse(d) {
   if (d.children) {
     d._children = d.children;
@@ -112,6 +78,42 @@ function listTabs() {
   });
 }
 
+
+var diameter = 960;
+var margin = {
+  top: 20,
+  right: 80,
+  bottom: 20,
+  left: 80
+},
+width = 960 - margin.right - margin.left,
+height = 800 - margin.top - margin.bottom;
+var tree = d3.layout.tree()
+  .size([height, width]);
+  /*
+  .separation(function(a,b){
+    return (a.parent == b.parent ? 1 : 2) / a.depth;
+  });
+  */
+var diagonal = d3.svg.diagonal()
+  .projection(function (d) {
+    return [d.y, d.x];
+  });
+svg = d3.select("#node").append("svg")
+  .attr("width", width + margin.right + margin.left)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var root = x().stringify();                // place where json is incepted;;; create and IMPORT JSONwith file, 
+root.x0 = height/2;
+root.y0 = 0;
+var zb = d3.behavior.zoom().scaleExtent([0.5,5]).on("zoom", function () {
+  zoom();
+});
+zb.translate([margin.left, margin.top]);
+  
+
+
 // appends string to background or popup page html with ajax
 /*
 I don't NEED this.. so why have it at this point?
@@ -136,10 +138,10 @@ on create new tab from any source, 3 cases
 
 /*
 Must create
-*/
+*
 
 $(document).ready(function(){
   console.log(x().stringify());
   createTree();
 });
-
+*/

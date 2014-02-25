@@ -1,4 +1,91 @@
 // bg.js
+/** Load functions before running any code */
+
+/* Queue Object */
+function Queue(stuff) {
+  var items;
+
+  this.items = stuff;
+  
+  Queue.prototype.pushh = function(item) {
+    if (typeof(items) === 'undefined') {
+      items = [];  
+    }
+    items.push(item);
+  };
+  
+  Queue.prototype.popp = function() {
+    return items.shift();
+  };
+  
+  Queue.prototype.peek = function() {
+    if (items.length > 0)
+      return items[0];
+    else
+      return undefined;
+  }
+}
+
+/**
+  * Creates nested JSON for session tree
+  */
+function nestReal() {
+  var count = 0;
+  var q = new Queue();
+  var json = [];
+
+  // initialize queue
+  for (var tab in raw_json_obj) {
+    if (tab.fromid === undefined) {       //figure out if we use -1 or underfined
+      q.pushh(tab);
+      count++;                    // increment count to know where i'm
+    } 
+  }
+  
+  while (count < raw_json_obj.length && q.peekk() != undefined) {               // could also do while queue is not empty maybe
+    var parent = q.popp();                            // get first tab in queue
+    if (parent.fromid === undefined)
+      json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with 
+    var children = x({"fromid": {is:parent.id}});     // get children of parent from db
+    for (var child in children) {                     // for each child to the original parent
+      q.pushh(child);                                   // add children to queue
+      count++;                                          // increment count to know where i'm at
+      json = addToParent(json, parent, child);          //merge with other file to implement
+    }
+  }
+  return json;
+}
+
+
+function addToParent(json, parent, child) {
+  if (child === undefined) {
+    json.push(parent);
+  } else {
+    var parent_tab = searchForTabWithID(json, parent.id);  // implement me
+    var child_tab  = searchForTabWithID(json, child.id);
+    if (parent_tab !== undefined)                           
+      parent_tab.children.push(child_tab);
+  }
+}
+
+
+
+function searchForTabWithID(json, id) {
+  if (id === undefined)             // if tab id doesnt exist, return undefined
+    return undefined;
+
+  if (json.id == id)                // if tab is the object, return it
+    return json;
+
+  for (var i in json) {             // for each field in json
+    if (json.children[i].id == id)  // if the id of the field is the correct id (fix bug)
+      return json;
+    if (json[i].children !== null && typeof(json[i]) == "object")
+      searchForTabWithID(json[i].children, id);
+                                    // recurse
+  }
+}
+
 /* open database when started */
 var x = TAFFY();
 var raw_data = {};
@@ -281,85 +368,3 @@ function addToParent(json, parent, child) {
 */ 
 
 
-
-function Queue(stuff) {
-  var items;
-
-  this.items = stuff;
-  
-  Queue.prototype.pushh = function(item) {
-    if (typeof(items) === 'undefined') {
-      items = [];  
-    }
-    items.push(item);
-  };
-  
-  Queue.prototype.popp = function() {
-    return items.shift();
-  };
-  
-  Queue.prototype.peek = function() {
-    if (items.length > 0)
-    	return items[0];
-    else
-    	return undefined;
-  }
-}
-
-
-function nestReal() {
-  var count = 0;
-  var q = new Queue();
-  var json = [];
-
-  // initialize queue
-  for (var tab in raw_json_obj) {
-    if (tab.fromid === undefined) {       //figure out if we use -1 or underfined
-      q.pushh(tab);
-      count++;                    // increment count to know where i'm
-    } 
-  }
-  
-  while (count < raw_json_obj.length && q.peekk() != undefined) {               // could also do while queue is not empty maybe
-    var parent = q.popp();                            // get first tab in queue
-    if (parent.fromid === undefined)
-    	json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with 
-    var children = x({"fromid": {is:parent.id}});     // get children of parent from db
-    for (var child in children) {                     // for each child to the original parent
-      q.pushh(child);                                   // add children to queue
-      count++;                                          // increment count to know where i'm at
-      json = addToParent(json, parent, child);          //merge with other file to implement
-    }
-  }
-  return json;
-}
-
-
-function addToParent(json, parent, child) {
-  if (child === undefined) {
-  	json.push(parent);
-  } else {
-	  var parent_tab = searchForTabWithID(json, parent.id);  // implement me
-	  var child_tab  = searchForTabWithID(json, child.id);
-	  if (parent_tab !== undefined)                           
-	    parent_tab.children.push(child_tab);
-	}
-}
-
-
-
-function searchForTabWithID(json, id) {
-  if (id === undefined)             // if tab id doesnt exist, return undefined
-    return undefined;
-
-  if (json.id == id)                // if tab is the object, return it
-  	return json;
-
-  for (var i in json) {             // for each field in json
-  	if (json.children[i].id == id)  // if the id of the field is the correct id (fix bug)
-  		return json;
-  	if (json[i].children !== null && typeof(json[i]) == "object")
-  		searchForTabWithID(json[i].children, id);
-  																	// recurse
-  }
-}
