@@ -30,7 +30,7 @@ console.log("started");
   **/
 chrome.tabs.onCreated.addListener( function(tab) {
   // while (tab.status == "loading") {}   // make sure tab is loaded
-  var obj = "TAB" : {
+  var obj = {
     "num":y,
     "tab":tab,
     "tabid":tab.id,
@@ -200,25 +200,31 @@ function Queue(stuff) {
   this.items = stuff;
   
   Queue.prototype.pushh = function(item) {
-    if (typeof(items) === 'undefined') {
-      items = [];  
-    }
-    items.push(item);
+    if (typeof(items) === 'undefined') 
+      items = items;  
+    else
+      items.push(item);
   }; 
   
   Queue.prototype.popp = function() {
-    return items.shift();
+    if (items !== undefined)
+      return items.shift();
+    else
+      return {};
   };
   
-  Queue.prototype.peek = function() {
-    if (items.length > 0)
+  Queue.prototype.peekk = function() {
+    if (items !== undefined)
       return items[0];
     else
-      return undefined;
+      return {};
   };
 
   Queue.prototype.print = function() {
-    console.log("printing " +  items.length + " items in queue: \n{");
+    if (items !== undefined)
+      console.log("printing " +  items.length + " items in queue: \n{");
+    else
+      console.log("items are undefined");
     for (var i in items) 
       console.log(items[i]);
     console.log("}");
@@ -235,7 +241,8 @@ function nestReal(raw) {
   // initialize queue
   for (var i in raw) {
     var tab = raw[i]
-    console.log("tab: " + tab);
+    console.log("tab: \n\t");
+    console.log(tab);
     if (tab.fromid === undefined) {       //figure out if we use -1 or underfined
       console.log("initial: " + tab.title);             // print initialized tab titles
       q.pushh(tab);
@@ -243,7 +250,7 @@ function nestReal(raw) {
     } 
   }
   
-  console.log(q.print());
+  console.log(q.print()); 
   while (count < raw.length && q.peekk() !== undefined) {               // could also do while queue is not empty maybe
     console.log("count: " + count);
     var parent = q.popp();                            // get first tab in queue
