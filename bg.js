@@ -30,8 +30,7 @@ console.log("started");
   **/
 chrome.tabs.onCreated.addListener( function(tab) {
   // while (tab.status == "loading") {}   // make sure tab is loaded
-  x.insert(
-  {
+  var obj = {
     "num":y,
     "tab":tab,
     "tabid":tab.id,
@@ -41,10 +40,10 @@ chrome.tabs.onCreated.addListener( function(tab) {
     "removed":false,
     "marked":false,
     "children": {}
-  }
-  );
+  };
+  x.insert(obj);
   // console.log(y + " : " + tab + " : " + tab.id + " : " + tab.openerTabId + " : " + tab.url + " : " + tab.title);
-  console.log(x().stringify());
+//  console.log(x().stringify());
   y++;
 });
 
@@ -76,13 +75,17 @@ chrome.commands.onCommand.addListener(function(command) {
   console.log('onCommand event received for message: ', command);
   var raw_data = {};
   if (command == "show-tree") {
-    raw_data = x().stringify();
+    raw_data = $.parseJSON(x().stringify());              
     console.log(raw_data);
+    var nested = nestReal(raw_data);
+    console.log(nested);
     popup = window.open("../browser_action.html");
   } else if (command == "clear-database") {
-    x = TAFFY();
+    console.log("clearing...");
+    x().remove(true);
     raw_data = {};
     nested_data = {};
+    console.log("successfully cleared");
   } 
 });
 
@@ -135,50 +138,7 @@ function nestData() {
                 [5]
               ]
   */
-  /*
-  for (var ob1 in raw_json_obj) {           // for each element in data
-    temp_adj_list.push(ob1.tabid);          // store element, first element in each array in a of a is the root tabs id
-    for (var ob2 in raw_json_obj) {         // for each other element in data
-      if (ob1.tabid == ob2.fromid && orphan[inner] != false){
-                                            // if the other element is a child of the current element and has not been visited
-        temp_adj_list.push(ob2.tabid)       // push that unique tab id into its adjacency list
-        orphan[inner] = false;              // set the child as taken by a parent; child is no longer orphan
-      }
-      inner++;
-    }
-    adj_index[outer] = temp_adj_list;       // place array into outer array spot
-    outer++;
-    temp_adj_list = [];                     // reset temp array
-  }
-  /*  Every orphan[x] thats true means it doesnt have 
-    After iterating through every pair, I've compared the id of each tab with the fromid 
-      of each tab to create an adjacency list (array of arrays)
-  */
 
-  /*
-  var adj = [];
-  //waht am idoing her make each adjindex array index:adj_index[0]
-  for (var i = 0; i < adj_index.length; i++) {
-    adj[adj_index[i][0]] = adj_index;
-  }
-  adj_index[0]
-
-
-  raw_json_obj.forEach( function(d) {
-
-  });
-
-
-
-  
-
-  /*
-  var nest = d3.nest()
-    .key( function(d) {
-      //write function such that tabid's childrens' values matches openertabid
-    })
-  
-} */
 
 
 /** 
@@ -195,55 +155,6 @@ function nestData() {
   *   Iterate through each tab, seeing if tabs have parents in the structure and then adding them..very time expensive tho
   *     (keep array of tabs that have been added to the json ds) if in here- then proceed to find and add
   * 
-  *
-function nest() {
-  var raw_json_obj = JSON.parse(x().stringify());    // raw array of tab object
-  var new_json = {};
-  // initialize
-  for (var parent in raw_json_obj) {
-    // for each tab
-    if (parent.fromid === undefined) {  // fix defitnition of <not a number>
-      // if the tab has no parent
-      mark(parent);                    // implement mark(tab)
-      for (var tab2 in raw_json_obj) {
-        if (parent.tabid == tab2.fromid) {
-          addToParent(new_json, parent, tab2);
-          mark(tab2);
-        }
-      }
-    }
-  }
-
-  var count = 0;
-
-  // finish up rest
-  for (var arbtab in raw_json_obj) {
-    while (count != raw_json_obj.length) {
-      // count how many tabs have been inserted, stop checking over list until this condition is satisfied
-      if (!isMarked(arbtab) && isMarked(getParent(arbtab))) {  
-      // implement isMarked(tab)
-      // implement getParent(tab)
-        // if the current tab hasn't been visited and its parent has, then its a direct link, easy to attach
-        addToParent(new_json, getParent(arbtab), arbtab);
-      }
-    }
-  }
-}
-
-// marks tab (usually as visited) (generally utilized when creating nest)
-function mark(tab) {
-  if (!tab.marked)
-    tab.marked = true;
-  else
-    console.log("tab marked ");
-}
-
-// checks if tab is marked
-function isMarked(tab) {
-  return (tab.marked);
-}
-
-
 
 // gets parent Tab object, returns -1 if there is no tab id
 function getParent(tab, raw_json_obj) {
@@ -293,7 +204,7 @@ function Queue(stuff) {
       items = [];  
     }
     items.push(item);
-  };
+  }; 
   
   Queue.prototype.popp = function() {
     return items.shift();
@@ -305,37 +216,52 @@ function Queue(stuff) {
     else
       return undefined;
   };
+
+  Queue.prototype.print = function() {
+    console.log("printing " +  items.length + "items in queue: \n");
+    for (var i in items) {
+      console.log(i);
+    }
+  }
 }
 
 
-function nestReal() {
+function nestReal(raw) {
   var count = 0;
   var q = new Queue();
   var json = [];
 
+  console.log("size of raw array: " + raw.length);
   // initialize queue
-  for (var tab in raw_json_obj) {
+  for (var tab in raw) {
     if (tab.fromid === undefined) {       //figure out if we use -1 or underfined
+      console.log("initial: " + tab.title);             // print initialized tab titles
       q.pushh(tab);
-      count++;                    // increment count to know where i'm
+      count++;                            // increment count to know where i'm at
     } 
   }
   
-  while (count < raw_json_obj.length && q.peekk() !== undefined) {               // could also do while queue is not empty maybe
+  console.log
+  while (count < raw.length && q.peekk() !== undefined) {               // could also do while queue is not empty maybe
+    console.log("count: " + count);
     var parent = q.popp();                            // get first tab in queue
+    console.log("parent: " + parent);
     if (parent.fromid === undefined)
       json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with 
     var children = x({"fromid": {is:parent.id}});     // get children of parent from db
     for (var child in children) {                     // for each child to the original parent
+      console.log("child: " + child);
       q.pushh(child);                                   // add children to queue
       count++;                                          // increment count to know where i'm at
       json = addToParent(json, parent, child);          //merge with other file to implement
     }
   }
+  console.log(json.toString());
   return json;
 }
 
 
+// takes in current json, parent tab and child tab - edits the tab object (which automatically edits json)
 function addToParent(json, parent, child) {
   if (child === undefined) {
     json.push(parent);
@@ -345,22 +271,23 @@ function addToParent(json, parent, child) {
     if (parent_tab !== undefined)                           
       parent_tab.children.push(child_tab);
   }
+  return json;
 }
 
 
-
-function searchForTabWithID(json, id) {
+// returns tab object found to function addToParent()
+function searchForTabWithID(obj, id) {
   if (id === undefined)             // if tab id doesnt exist, return undefined
     return undefined;
 
-  if (json.id == id)                // if tab is the object, return it
-    return json;
+  if (obj.id == id)                // if tab is the object, return it
+    return obj;
 
-  for (var i in json) {             // for each field in json
-    if (json.children[i].id == id)  // if the id of the field is the correct id (fix bug)
-      return json;
-    if (json[i].children !== null && typeof(json[i]) == "object")
-      searchForTabWithID(json[i].children, id);
+  for (var i in obj) {             // for each field in obj
+    if (obj.children[i].id == id)  // if the id of the field is the correct id (fix bug)
+      return obj;
+    if (obj[i].children !== null && typeof(obj[i]) == "object")
+      searchForTabWithID(obj[i].children, id);
                                     // recurse
   }
 }

@@ -25,7 +25,7 @@
       "description": "Show session tree"
     },
     "clear-database": {
-      "suggested_key": { "default": "Ctrl+Shift+Q"},
+      "suggested_key": { "default": "Ctrl+Shift+U"},
       "description": "Starts new tree session"
     }
 
