@@ -241,7 +241,7 @@ function nestReal(raw) {
     } 
   }
   
-  console.log
+  console.log(q.print());
   while (count < raw.length && q.peekk() !== undefined) {               // could also do while queue is not empty maybe
     console.log("count: " + count);
     var parent = q.popp();                            // get first tab in queue
