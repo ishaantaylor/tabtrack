@@ -30,7 +30,7 @@ console.log("started");
   **/
 chrome.tabs.onCreated.addListener( function(tab) {
   // while (tab.status == "loading") {}   // make sure tab is loaded
-  var obj = {
+  var obj = "TAB" : {
     "num":y,
     "tab":tab,
     "tabid":tab.id,
@@ -218,10 +218,10 @@ function Queue(stuff) {
   };
 
   Queue.prototype.print = function() {
-    console.log("printing " +  items.length + "items in queue: \n");
-    for (var i in items) {
-      console.log(i);
-    }
+    console.log("printing " +  items.length + " items in queue: \n{");
+    for (var i in items) 
+      console.log(items[i]);
+    console.log("}");
   }
 }
 
@@ -233,7 +233,9 @@ function nestReal(raw) {
 
   console.log("size of raw array: " + raw.length);
   // initialize queue
-  for (var tab in raw) {
+  for (var i in raw) {
+    var tab = raw[i]
+    console.log("tab: " + tab);
     if (tab.fromid === undefined) {       //figure out if we use -1 or underfined
       console.log("initial: " + tab.title);             // print initialized tab titles
       q.pushh(tab);
@@ -249,7 +251,8 @@ function nestReal(raw) {
     if (parent.fromid === undefined)
       json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with 
     var children = x({"fromid": {is:parent.id}});     // get children of parent from db
-    for (var child in children) {                     // for each child to the original parent
+    for (var j in children) {                     // for each child to the original parent
+      var child = children[j];
       console.log("child: " + child);
       q.pushh(child);                                   // add children to queue
       count++;                                          // increment count to know where i'm at
@@ -277,17 +280,22 @@ function addToParent(json, parent, child) {
 
 // returns tab object found to function addToParent()
 function searchForTabWithID(obj, id) {
-  if (id === undefined)             // if tab id doesnt exist, return undefined
+  if (id === undefined)            // if tab id doesnt exist, return undefined
     return undefined;
 
   if (obj.id == id)                // if tab is the object, return it
-    return obj;
+    return obj; 
 
-  for (var i in obj) {             // for each field in obj
-    if (obj.children[i].id == id)  // if the id of the field is the correct id (fix bug)
+  
+  for (var j in obj.children) {
+    if (obj.children[j].id == id)  // if the id of the field is the correct id (fix bug)
       return obj;
-    if (obj[i].children !== null && typeof(obj[i]) == "object")
-      searchForTabWithID(obj[i].children, id);
-                                    // recurse
+  }
+
+  // if the immediate children don't return anything, check the childrens' children.
+  for (var j in obj.children) {
+    if (typeof(obj[i]) == "object")
+        searchForTabWithID(obj.children[j], id);
+                                  // recurse
   }
 }
