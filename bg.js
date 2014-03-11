@@ -1,8 +1,8 @@
 // bg.js
 /* open database when started */
 var x = TAFFY();
-var raw_data = {};
-var nested_data = {};
+var raw_data = [];
+var nested_data = [];
 /**
  * Database entry format:
  * {
@@ -238,11 +238,16 @@ function Queue() {
       console.log("items are undefined");
     }
   };
+
+  Queue.prototype.isEmpty = function () {
+    return (this.peekk() === undefined);
+  }
 }
 
 
 var json_new = [];
 function nestReal(raw) {
+  json_new.push({"name":"root", "children":[] });  
   var count = 0;
   var q = new Queue();
   // var json_new = [];
@@ -259,7 +264,20 @@ function nestReal(raw) {
       count++;                            // increment count to know where i'm at
     } 
   }
-  
+
+  if (q.isEmpty()) {
+
+  }
+
+  // gonna need to handle the case that the initial queueeing wont yeild things 
+      // because certian tabs arent undefined.. 
+      // that means that not all initial tabs in this tree will lead to an undefined tab. 
+          // that means taht i need to be able to tell if a tab is a parent or a child (or both ) 
+            //.. if a tab isnt a child, then it must be a praent. so I need to write in my algorithm: 
+              // assume the tab is a child until proven its not (until i cant find it in the tree or the raw data)
+  // could create a sorted array for this, but then it would take O(n) to insert and O(log n) to search (bst).
+
+
   console.log(q.printt()); 
   while (count < raw.length && q.peekk() !== undefined) {               // could also do while queue is not empty maybe
     console.log("count: " + count);
@@ -273,7 +291,7 @@ function nestReal(raw) {
       console.log("child: " + child);
       q.pushh(child);                                   // add children to queue
       count++;                                          // increment count to know where i'm at
-      json_new = addToParent(json_new, parent, child);          //merge with other file to implement
+      json_new = addToParent(json_new, parent, child);          
     }
   }
   console.log(json_new.toString());
