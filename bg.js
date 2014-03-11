@@ -78,6 +78,7 @@ chrome.commands.onCommand.addListener(function(command) {
     raw_data = $.parseJSON(x().stringify());              
     console.log(raw_data);
     var nested = nestReal(raw_data);
+    console.log("nested json: \n");
     console.log(nested);
     popup = window.open("../browser_action.html");
   } else if (command == "clear-database") {
@@ -194,41 +195,46 @@ function addToParent(json, parent, child) {
 
 
 
-function Queue(stuff) {
-  var items;
+function Queue() {
+  var items = [];
 
-  this.items = stuff;
-  
-  Queue.prototype.pushh = function(item) {
-    if (typeof(items) === 'undefined') 
-      items = items;  
-    else
-      items.push(item);
-  }; 
-  
-  Queue.prototype.popp = function() {
-    if (items !== undefined)
-      return items.shift();
-    else
-      return {};
+  Queue.prototype.pushh = function (item) {
+    items.push(item);
+    // console.log("printing push result: " + this.printt());
   };
-  
-  Queue.prototype.peekk = function() {
-    if (items !== undefined)
+
+  Queue.prototype.popp = function () {
+    if (this.peekk() !== undefined) {
+      // console.log("pop: " + this.printt());
+      var ret = items.shift();
+      return ret;
+    } else {
+      // console.log("pop: " + this.printt());
+      return undefined;
+    }
+  };
+
+  Queue.prototype.peekk = function () {
+    if (items[0] !== undefined) {
+      // console.log("peek: " + items[0]);
       return items[0];
-    else
-      return {};
+    } else {
+      console.log("nothing to peek");
+      return undefined;
+    }
   };
 
-  Queue.prototype.print = function() {
-    if (items !== undefined)
-      console.log("printing " +  items.length + " items in queue: \n{");
-    else
+  Queue.prototype.printt = function () {
+    if (this.peekk() !== undefined) {
+      console.log("printing " + items.length + " items in queue: \n{");
+      for (var i in items) {
+        console.log(items[i]);
+      }
+      console.log("}");
+    } else {
       console.log("items are undefined");
-    for (var i in items) 
-      console.log(items[i]);
-    console.log("}");
-  }
+    }
+  };
 }
 
 
@@ -244,7 +250,7 @@ function nestReal(raw) {
     console.log("tab: \n\t");
     console.log(tab);
     if (tab.fromid === undefined) {       //figure out if we use -1 or underfined
-      console.log("initial: " + tab.title);             // print initialized tab titles
+      console.log("initial: " + tabz);             // print initialized tab titles
       q.pushh(tab);
       count++;                            // increment count to know where i'm at
     } 
