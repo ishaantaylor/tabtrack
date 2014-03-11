@@ -194,11 +194,12 @@ function addToParent(json, parent, child) {
 */
 
 
-
+var items = [];
 function Queue() {
-  var items = [];
+  // var items = [];
 
   Queue.prototype.pushh = function (item) {
+    console.log("pushing " + item);
     items.push(item);
     // console.log("printing push result: " + this.printt());
   };
@@ -207,6 +208,7 @@ function Queue() {
     if (this.peekk() !== undefined) {
       // console.log("pop: " + this.printt());
       var ret = items.shift();
+      console.log("popping " + ret);
       return ret;
     } else {
       // console.log("pop: " + this.printt());
@@ -217,6 +219,7 @@ function Queue() {
   Queue.prototype.peekk = function () {
     if (items[0] !== undefined) {
       // console.log("peek: " + items[0]);
+      console.log("peek :" + items[0]);
       return items[0];
     } else {
       console.log("nothing to peek");
@@ -238,10 +241,11 @@ function Queue() {
 }
 
 
+var json_new = [];
 function nestReal(raw) {
   var count = 0;
   var q = new Queue();
-  var json = [];
+  // var json_new = [];
 
   console.log("size of raw array: " + raw.length);
   // initialize queue
@@ -262,18 +266,18 @@ function nestReal(raw) {
     var parent = q.popp();                            // get first tab in queue
     console.log("parent: " + parent);
     if (parent.fromid === undefined)
-      json = addToParent(json, parent, undefined);    //implement cases for both nodes without parent and with 
+      json_new = addToParent(json_new, parent, undefined);    //implement cases for both nodes without parent and with 
     var children = x({"fromid": {is:parent.id}});     // get children of parent from db
     for (var j in children) {                     // for each child to the original parent
       var child = children[j];
       console.log("child: " + child);
       q.pushh(child);                                   // add children to queue
       count++;                                          // increment count to know where i'm at
-      json = addToParent(json, parent, child);          //merge with other file to implement
+      json_new = addToParent(json_new, parent, child);          //merge with other file to implement
     }
   }
-  console.log(json.toString());
-  return json;
+  console.log(json_new.toString());
+  return json_new;
 }
 
 
