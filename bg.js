@@ -250,7 +250,7 @@ function nestReal(raw) {
     console.log("tab: \n\t");
     console.log(tab);
     if (tab.fromid === undefined) {       //figure out if we use -1 or underfined
-      console.log("initial: " + tabz);             // print initialized tab titles
+      console.log("initial: " + tab);             // print initialized tab titles
       q.pushh(tab);
       count++;                            // increment count to know where i'm at
     } 
