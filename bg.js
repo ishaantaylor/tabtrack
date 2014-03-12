@@ -73,19 +73,21 @@ chrome.tabs.onRemoved.addListener( function( tab /*, {"windowID":tab.windowID, "
 /** Handle Commands **/
 chrome.commands.onCommand.addListener(function(command) {
   console.log('onCommand event received for message: ', command);
-  var raw_data = {};
+  var raw_data = [];
   if (command == "show-tree") {
     raw_data = $.parseJSON(x().stringify());              
     console.log(raw_data);
+    /*
     var nested = nestReal(raw_data);
     console.log("nested json: \n");
     console.log(nested);
+    */
     popup = window.open("../browser_action.html");
   } else if (command == "clear-database") {
     console.log("clearing...");
     x().remove(true);
-    raw_data = {};
-    nested_data = {};
+    raw_data = [];
+    nested_data = [];
     console.log("successfully cleared");
   } 
 });
