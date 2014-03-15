@@ -1,6 +1,7 @@
 
 //problem statement:
 	// given an array of objects, sort those objects into a hierarchy 
+	//
 
 // input sets:
 	// set where all tabs have predecessors inside the data
@@ -10,6 +11,26 @@
 // assumptions:
 	// every child tab that comes from a parent tab will have a larger id number than its parent **
 	//
+
+// solution
+	// pre processing: catch all tabs that fromid are in array C (meaning they are the predecessors for roots of their trees)
+		// array A will be the array that shows all open tabs 
+			// (possible bug: could have new tabs generated with a fromid of a closed tab by the time data is collected..but i think its fine)
+		// array B will be the array that contains all tabs in the forrest
+		// figure out which tabs are in A but not in B -- put it into a third array C
+			// sort them and then run a linear comparison  
+	// algo
+		// do the pre processing
+		// catch all fromid:undefined tabs, push into json
+		// up until now, every tab in the json cannot be a child
+		// with each tab
+			// pull from database all tabs that have a fromid of current tab
+			// attach these tabs / push them into json children
+
+			// (this eliminates having to search for tabs as well if we just make the function recursively ...
+			// for each child that we just added
+				// traversing the json and performing this action for each)
+
 
 
 
