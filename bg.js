@@ -203,6 +203,33 @@ function nestReal(raw) {
 }
 
 
+function getAllOpenTabs() {
+
+}
+
+// find each element that is present in both arrays
+// assume each array is a unique set of elements
+function intersect(a,b) {
+  // sort
+  a = a.sort();
+  b = b.sort();
+
+  
+
+  var c = [];   // array of intersect
+}
+
+
+function nest(raw) {
+  // pre processing
+  var a = [];   // array that shows all open tabs
+  var b = [];   // array that contains all tabs that will be in the forest
+
+  var c = intersect(a,b);
+
+}
+
+
 // takes in current json, parent tab and child tab - edits the tab object (which automatically edits json)
 function addToParent(json, parent, child) {
   if (child === undefined) {

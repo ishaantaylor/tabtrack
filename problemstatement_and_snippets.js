@@ -19,12 +19,18 @@
 		// array B will be the array that contains all tabs in the forrest
 		// figure out which tabs are in A but not in B -- put it into a third array C
 			// sort them and then run a linear comparison  
+				// since both arrays are non-decrasing, (use smaller array as reference) i can eliminate tabs that 
+				// are less than the current reference value
 	// algo
 		// do the pre processing
-		// catch all fromid:undefined tabs, push into json
-		// up until now, every tab in the json cannot be a child
+		// 3 cases for roots
+			// catch all fromid:undefined tabs, push into json
+			// compare the fromid of remaining tabs, push into json if predecessor appears in array C
+			// compare the fromid of remaining tabs, push into json if predecessor !appear in array B
+		// up until now, every tab in the json cannot be a child (theyre roots)
 		// with each tab
 			// pull from database all tabs that have a fromid of current tab
+				
 			// attach these tabs / push them into json children
 
 			// (this eliminates having to search for tabs as well if we just make the function recursively ...
