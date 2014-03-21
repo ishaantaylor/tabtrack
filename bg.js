@@ -206,7 +206,9 @@ function nestReal(raw) {
 
 
 function getAllOpenTabs() {
-
+  chrome.tabs.query({}, function(tabs) {
+    return tabs;
+  });
 }
 
 // find each element that is present in both arrays
@@ -226,7 +228,8 @@ function nest(raw) {
   // pre processing
   var a = [];   // array that shows all open tabs
   var b = [];   // array that contains all tabs that will be in the forest
-
+  a = getAllOpenTabs(); 
+  b = x();
   var c = intersect(a,b);
 
 }
