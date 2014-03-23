@@ -74,6 +74,7 @@ chrome.tabs.onRemoved.addListener( function( tab /*, {"windowID":tab.windowID, "
 chrome.commands.onCommand.addListener(function(command) {
   console.log('onCommand event received for message: ', command);
   var raw_data = [];
+  console.log(raw_data);
   if (command == "show-tree") {
     raw_data = $.parseJSON(x().stringify());    
     console.log("raw_data: ");          

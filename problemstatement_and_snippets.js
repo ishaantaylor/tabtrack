@@ -1,4 +1,16 @@
+// simple algorithm
+	// query each tabs parent as its created and push it into the children array... shit then i have to figure out how to query for infinitely leveled children... this isnt that simlpe unfortunately.
+	// i have a method that can traverse every object from top to bottom of a json object.. hopefully it works? ill test it on fiddle
 
+
+
+
+
+
+
+// 3/23/14 - this doesnt seem to be getting accomplished, 
+//// deciding its better to have a really simple, possibly really inefficient solution rather than not having a solution at all.
+//// once i get the simple solution working (implying the entire datapath will work as well) then i'll improve the algo
 //problem statement:
 	// given an array of objects, sort those objects into a hierarchy 
 	//
