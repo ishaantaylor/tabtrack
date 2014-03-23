@@ -3,6 +3,7 @@
 var x = TAFFY();
 var raw_data = [];
 var nested_data = [];
+
 /**
  * Database entry format:
  * {
@@ -74,13 +75,13 @@ chrome.commands.onCommand.addListener(function(command) {
   console.log('onCommand event received for message: ', command);
   var raw_data = [];
   if (command == "show-tree") {
-    raw_data = $.parseJSON(x().stringify());              
+    raw_data = $.parseJSON(x().stringify());    
+    console.log("raw_data: ");          
     console.log(raw_data);
     
-    // var nested = 
-    nest(raw_data);     // destroying the raw data
-    console.log("nested json: \n");
-    console.log(raw_data);
+    nest(raw_data);     // keep in mind i'm destroying the raw data, fix_later
+    console.log("nested json: ");
+    console.log(nested_data);
     
     popup = window.open("../browser_action.html");
   } else if (command == "clear-database") {
@@ -150,7 +151,7 @@ function Queue() {
 }
 
 
-var json_new = [];
+
 /*
 function nestReal(raw) {
   json_new.push({"name":"root", "children":[] });  
@@ -259,7 +260,7 @@ function nest(raw) {
   var b = [];   // array that contains all tabs that will be in the forest
   // var c = [];   // array that contains the intersect of a and b
   var d = [];   // sorted array of all tabs' ids
-  var json = [];   // array that holds nested json data
+  //nested_data = [];   // array that holds nested json data
 
   // a = getAllOpenTabs(); 
   b = raw;
@@ -268,14 +269,14 @@ function nest(raw) {
 
   for (var i in raw) {
     if (!isIn(b[i].fromid,d)) {     // if tab fromid is NOT in d(forest ids) 
-      json.push(b[i]);              //  then push it
+      nested_data.push(b[i]);              //  then push it
     }
   }
 
   //
   // recursive part
-  for (var j in json) {
-    addChildren(json[j]);
+  for (var j in nested_data) {
+    addChildren(nested_data[j]);
   }
 }
 
@@ -292,7 +293,7 @@ function addChildren(tab) {
   tab.children = json_children;
 
   /// for each of those children, call this function again.....
-  for (var k in childs) {
+  for (var k in json_children) {
     addChildren(childs[k]);
   }
 }
