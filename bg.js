@@ -76,11 +76,11 @@ chrome.commands.onCommand.addListener(function(command) {
   if (command == "show-tree") {
     raw_data = $.parseJSON(x().stringify());              
     console.log(raw_data);
-    /*
-    var nested = nestReal(raw_data);
+    
+    var nested = nest(raw_data);
     console.log("nested json: \n");
     console.log(nested);
-    */
+    
     popup = window.open("../browser_action.html");
   } else if (command == "clear-database") {
     console.log("clearing...");
@@ -205,11 +205,37 @@ function nestReal(raw) {
 */
 
 
+function getID(tab) {
+  return tab.tabid;
+}
+
+
+function makeSortedTabIDarray(json) {
+  var ids = [];
+  for (var i in json) {
+    ids.push(json[i].tabid);
+  }
+  // ids = ids.sort();      // seems like arrays are already sorted
+  return ids;
+}
+
+
+function isIn(integer, array) {
+  if (integer === undefined)
+    return false;
+  if (array === undefined)
+    return false;
+  return (integer in array);
+}
+
+
+/*
 function getAllOpenTabs() {
   chrome.tabs.query({}, function(tabs) {
     return tabs;
   });
 }
+
 
 // find each element that is present in both arrays
 // assume each array is a unique set of elements
@@ -222,20 +248,52 @@ function intersect(a,b) {
 
   var c = [];   // array of intersect
 }
+*/
 
 
 function nest(raw) {
   // pre processing
-  var a = [];   // array that shows all open tabs
+  // var a = [];   // array that shows all open tabs
   var b = [];   // array that contains all tabs that will be in the forest
-  a = getAllOpenTabs(); 
-  b = x();
-  var c = intersect(a,b);
+  // var c = [];   // array that contains the intersect of a and b
+  var d = [];   // sorted array of all tabs' ids
+  var json = [];   // array that holds nested json data
 
+  // a = getAllOpenTabs(); 
+  b = raw;
+  // c = intersect(a,b);
+  d = makeSortedTabIDarray(raw);
+
+  for (var i in raw) {
+    if (!isIn(b[i].fromid,d)) {     // if tab fromid is NOT in d(forest ids) 
+      json.push(b[i]);              //  then push it
+    }
+  }
+
+  //
+  // recursive part
+  for (var j in json) {
+    addChildren(json[j]);
+  }
 }
 
 
-// takes in current json, parent tab and child tab - edits the tab object (which automatically edits json)
+// find tabs in db such that {fromid:tab.tabid}
+// query if there are any tabs such that their fromid is this tabs id
+function addChildren(tab) {
+  var childs = x({fromid:{is:tab.tabid}});        
+  
+  // updatecurrent tab with those children
+  tab.children = childs;
+
+  /// for each of those children, call this function again.....
+  for (var k in childs) {
+    addChildren(childs[k]);
+  }
+}
+
+
+/* takes in current json, parent tab and child tab - edits the tab object (which automatically edits json)
 function addToParent(json, parent, child) {
   if (child === undefined) {
     json.push(parent);
@@ -270,3 +328,4 @@ function searchForTabWithID(obj, id) {
                                   // recurse
   }
 }
+*/

@@ -16,7 +16,7 @@
 	// pre processing: catch all tabs that fromid are in array C (meaning they are the predecessors for roots of their trees)
 		// array A will be the array that shows all open tabs 
 			// (possible bug: could have new tabs generated with a fromid of a closed tab by the time data is collected..but i think its fine)
-		// array B will be the array that contains all tabs in the forrest
+		// array B will be the array that contains all tabs in the forest
 		// figure out which tabs are in A but not in B -- put it into a third array C
 			// sort them and then run a linear comparison  
 				// since both arrays are non-decrasing, (use smaller array as reference) i can eliminate tabs that 
