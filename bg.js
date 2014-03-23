@@ -38,7 +38,7 @@ chrome.tabs.onCreated.addListener( function(tab) {
     "title":tab.title,
     "removed":false,
     "marked":false,
-    "children": {}
+    "children": []
   };
   x.insert(obj);
   // console.log(y + " : " + tab + " : " + tab.id + " : " + tab.openerTabId + " : " + tab.url + " : " + tab.title);
@@ -77,9 +77,10 @@ chrome.commands.onCommand.addListener(function(command) {
     raw_data = $.parseJSON(x().stringify());              
     console.log(raw_data);
     
-    var nested = nest(raw_data);
+    // var nested = 
+    nest(raw_data);     // destroying the raw data
     console.log("nested json: \n");
-    console.log(nested);
+    console.log(raw_data);
     
     popup = window.open("../browser_action.html");
   } else if (command == "clear-database") {
@@ -250,7 +251,8 @@ function intersect(a,b) {
 }
 */
 
-
+// some users will press ctrl+t when on tab A, creating new tree with root tab B. this wont work because ctrl+t doesnt make the tab undefined
+/// thus, what I need to do is attach a boolean property called "root" to each tab. if true, initially push into json, else..dont
 function nest(raw) {
   // pre processing
   // var a = [];   // array that shows all open tabs
@@ -281,10 +283,13 @@ function nest(raw) {
 // find tabs in db such that {fromid:tab.tabid}
 // query if there are any tabs such that their fromid is this tabs id
 function addChildren(tab) {
-  var childs = x({fromid:{is:tab.tabid}});        
-  
+  if (tab === undefined || tab.tabid === undefined)
+    return;
+  var childs = x({fromid:{is:tab.tabid}});    
+  // console.log(childs.stringify());    
+  var json_children = $.parseJSON(childs.stringify()); 
   // updatecurrent tab with those children
-  tab.children = childs;
+  tab.children = json_children;
 
   /// for each of those children, call this function again.....
   for (var k in childs) {
