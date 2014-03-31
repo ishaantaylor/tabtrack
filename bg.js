@@ -68,7 +68,7 @@ chrome.tabs.onRemoved.addListener( function( tab /*, {"windowID":tab.windowID, "
 });
 /**/
 
-
+var 
 
 /** Handle Commands **/
 chrome.commands.onCommand.addListener(function(command) {
@@ -80,7 +80,7 @@ chrome.commands.onCommand.addListener(function(command) {
     console.log("raw_data: ");          
     console.log(raw_data);
     
-    nest(raw_data);     // keep in mind i'm destroying the raw data, fix_later
+    nest(raw_data, nested_data);     // keep in mind i'm destroying the raw data, fix_later
     console.log("nested json: ");
     console.log(nested_data);
     
@@ -238,46 +238,33 @@ function getAllOpenTabs() {
     return tabs;
   });
 }
-
-
-// find each element that is present in both arrays
-// assume each array is a unique set of elements
-function intersect(a,b) {
-  // sort
-  a = a.sort();
-  b = b.sort();
-
-
-
-  var c = [];   // array of intersect
-}
 */
 
 // some users will press ctrl+t when on tab A, creating new tree with root tab B. this wont work because ctrl+t doesnt make the tab undefined
 /// thus, what I need to do is attach a boolean property called "root" to each tab. if true, initially push into json, else..dont
-function nest(raw) {
+function nest(raw, nest) {
   // pre processing
   // var a = [];   // array that shows all open tabs
   var b = [];   // array that contains all tabs that will be in the forest
   // var c = [];   // array that contains the intersect of a and b
   var d = [];   // sorted array of all tabs' ids
-  //nested_data = [];   // array that holds nested json data
+  // nest = [];   // array that holds nested json data
 
   // a = getAllOpenTabs(); 
   b = raw;
   // c = intersect(a,b);
-  d = makeSortedTabIDarray(raw);
+  d = makeSortedTabIDarray(b);
 
   for (var i in raw) {
     if (!isIn(b[i].fromid,d)) {     // if tab fromid is NOT in d(forest ids) 
-      nested_data.push(b[i]);              //  then push it
+      nest.push(b[i]);              //  then push it
     }
   }
 
   //
   // recursive part
-  for (var j in nested_data) {
-    addChildren(nested_data[j]);
+  for (var j in nest) {
+    addChildren(nest[j]);
   }
 }
 
@@ -287,15 +274,15 @@ function nest(raw) {
 function addChildren(tab) {
   if (tab === undefined || tab.tabid === undefined)
     return;
-  var childs = x({fromid:{is:tab.tabid}});    
+  var childs = x({fromid:tab.tabid});    
   // console.log(childs.stringify());    
-  var json_children = $.parseJSON(childs.stringify()); 
+  var json_children = $.parseJSON(childs.stringify());      // not sure why i have to do this
   // updatecurrent tab with those children
   tab.children = json_children;
 
   /// for each of those children, call this function again.....
   for (var k in json_children) {
-    addChildren(childs[k]);
+    addChildren(json_children[k]);
   }
 }
 
