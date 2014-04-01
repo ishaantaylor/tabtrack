@@ -76,8 +76,8 @@ chrome.commands.onCommand.addListener(function(command) {
   console.log(raw_data);
   if (command == "show-tree") {
     // console.log(x().stringify());
-    // raw_data = $.parseJSON(x().stringify());   
-    raw_data = [{"num":0,"tab":{"active":false,"height":0,"highlighted":false,"id":1145,"incognito":false,"index":1,"openerTabId":1040,"pinned":false,"selected":true,"status":"loading","title":"New Tab","url":"chrome://newtab/","width":0,"windowId":1039},"tabid":1145,"fromid":1040,"url":"chrome://newtab/","title":"New Tab","removed":false,"marked":false,"children":[],"___id":"T000002R000002","___s":true},{"num":1,"tab":{"active":false,"height":0,"highlighted":false,"id":1150,"incognito":false,"index":2,"openerTabId":1145,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1150,"fromid":1145,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000003","___s":true},{"num":2,"tab":{"active":false,"height":0,"highlighted":false,"id":1152,"incognito":false,"index":3,"openerTabId":1145,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1152,"fromid":1145,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000004","___s":true},{"num":3,"tab":{"active":false,"height":0,"highlighted":false,"id":1156,"incognito":false,"index":4,"openerTabId":1145,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1156,"fromid":1145,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000005","___s":true},{"num":4,"tab":{"active":false,"height":0,"highlighted":false,"id":1162,"incognito":false,"index":3,"openerTabId":1150,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1162,"fromid":1150,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000006","___s":true},{"num":5,"tab":{"active":false,"height":0,"highlighted":false,"id":1164,"incognito":false,"index":4,"openerTabId":1150,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1164,"fromid":1150,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000007","___s":true},{"num":6,"tab":{"active":false,"height":0,"highlighted":false,"id":1170,"incognito":false,"index":4,"openerTabId":1162,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1170,"fromid":1162,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000008","___s":true}];
+    raw_data = $.parseJSON(x().stringify());   
+    // raw_data = [{"num":0,"tab":{"active":false,"height":0,"highlighted":false,"id":1145,"incognito":false,"index":1,"openerTabId":1040,"pinned":false,"selected":true,"status":"loading","title":"New Tab","url":"chrome://newtab/","width":0,"windowId":1039},"tabid":1145,"fromid":1040,"url":"chrome://newtab/","title":"New Tab","removed":false,"marked":false,"children":[],"___id":"T000002R000002","___s":true},{"num":1,"tab":{"active":false,"height":0,"highlighted":false,"id":1150,"incognito":false,"index":2,"openerTabId":1145,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1150,"fromid":1145,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000003","___s":true},{"num":2,"tab":{"active":false,"height":0,"highlighted":false,"id":1152,"incognito":false,"index":3,"openerTabId":1145,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1152,"fromid":1145,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000004","___s":true},{"num":3,"tab":{"active":false,"height":0,"highlighted":false,"id":1156,"incognito":false,"index":4,"openerTabId":1145,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1156,"fromid":1145,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000005","___s":true},{"num":4,"tab":{"active":false,"height":0,"highlighted":false,"id":1162,"incognito":false,"index":3,"openerTabId":1150,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1162,"fromid":1150,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000006","___s":true},{"num":5,"tab":{"active":false,"height":0,"highlighted":false,"id":1164,"incognito":false,"index":4,"openerTabId":1150,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1164,"fromid":1150,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000007","___s":true},{"num":6,"tab":{"active":false,"height":0,"highlighted":false,"id":1170,"incognito":false,"index":4,"openerTabId":1162,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1170,"fromid":1162,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000008","___s":true}];
 
     console.log("raw_data: ");          
     console.log(raw_data);
@@ -224,7 +224,7 @@ function makeSortedTabIDarray(json) {
   return ids;
 }
 
-
+/*
 function isIn(integer, array) {
   if (integer === undefined)
     return false;
@@ -232,6 +232,7 @@ function isIn(integer, array) {
     return false;
   return (integer in array);
 }
+*/
 
 
 /*
@@ -257,12 +258,8 @@ function nest(raw, nest) {
   // c = intersect(a,b);
   d = makeSortedTabIDarray(b);
 
-  for (var i in raw) {            // this seems to be a problem
-    var valid = !isIn(b[i].fromid,d);   // if tab fromid is NOT in d(forest ids)  
-    var valid2 = (b[i].fromid in d);
-    console.log("b[i]: " + b[i].fromid);
-    console.log("d: " + d);
-    console.log(valid2);
+  for (var i in b) {            // this seems to be a problem
+    var valid = (d.indexOf(b[i].fromid) == -1);
     if (valid) {     
       nest.push(b[i]);                  //  then push it
     }
