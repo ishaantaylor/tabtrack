@@ -104,7 +104,7 @@ svg = d3.select("#node").append("svg")
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-var root = x().stringify();                // place where json is incepted;;; create and IMPORT JSONwith file, 
+var root = nested_data;                // place where json is incepted;;; create and IMPORT JSONwith file, 
 root.x0 = height/2;
 root.y0 = 0;
 var zb = d3.behavior.zoom().scaleExtent([0.5,5]).on("zoom", function () {

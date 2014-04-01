@@ -1,6 +1,6 @@
 // bg.js
 /* open database when started */
-var x = TAFFY();
+var x = TAFFY([{"num":0,"tab":{"active":false,"height":0,"highlighted":false,"id":1145,"incognito":false,"index":1,"openerTabId":1040,"pinned":false,"selected":true,"status":"loading","title":"New Tab","url":"chrome://newtab/","width":0,"windowId":1039},"tabid":1145,"fromid":1040,"url":"chrome://newtab/","title":"New Tab","removed":false,"marked":false,"children":[],"___id":"T000002R000002","___s":true},{"num":1,"tab":{"active":false,"height":0,"highlighted":false,"id":1150,"incognito":false,"index":2,"openerTabId":1145,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1150,"fromid":1145,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000003","___s":true},{"num":2,"tab":{"active":false,"height":0,"highlighted":false,"id":1152,"incognito":false,"index":3,"openerTabId":1145,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1152,"fromid":1145,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000004","___s":true},{"num":3,"tab":{"active":false,"height":0,"highlighted":false,"id":1156,"incognito":false,"index":4,"openerTabId":1145,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1156,"fromid":1145,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000005","___s":true},{"num":4,"tab":{"active":false,"height":0,"highlighted":false,"id":1162,"incognito":false,"index":3,"openerTabId":1150,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1162,"fromid":1150,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000006","___s":true},{"num":5,"tab":{"active":false,"height":0,"highlighted":false,"id":1164,"incognito":false,"index":4,"openerTabId":1150,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1164,"fromid":1150,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000007","___s":true},{"num":6,"tab":{"active":false,"height":0,"highlighted":false,"id":1170,"incognito":false,"index":4,"openerTabId":1162,"pinned":false,"selected":false,"status":"complete","title":"","url":"","width":0,"windowId":1039},"tabid":1170,"fromid":1162,"url":"","title":"","removed":false,"marked":false,"children":[],"___id":"T000002R000008","___s":true}]);
 var raw_data = [];
 var nested_data = [];
 
@@ -41,7 +41,7 @@ chrome.tabs.onCreated.addListener( function(tab) {
     "marked":false,
     "children": []
   };
-  x.insert(obj);
+  // x.insert(obj);
   // console.log(y + " : " + tab + " : " + tab.id + " : " + tab.openerTabId + " : " + tab.url + " : " + tab.title);
 //  console.log(x().stringify());
   y++;
