@@ -1,19 +1,18 @@
 
- .node {
-     cursor: pointer;
- }
+ 
  .node circle {
+     cursor: pointer;
      fill: #fff;
      stroke: steelblue;
      stroke-width: 2px;
  }
  .node text {
-     font: 12px sans-serif;
+     font: 11px sans-serif;
      fill: black;
  }
- .link {
+ path.link {
      fill: none;
-     /* stroke: white; */
+     stroke: #ccc; 
      stroke-width: 1.5px;
  }
  svg {
