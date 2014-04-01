@@ -1,3 +1,17 @@
+// 4/1/12
+  // big progress. got nested json to work, got something to show up on the extension.
+  // todo
+      // write my own version of the d3 tree implementation, my own styles etc.
+        // figure out how to hover over tree node and display info
+        // zoomable, in and out
+        // clean nice interface (make use of mouse hover -> information)
+        // obviously collapse and expand
+        //keep adding...etc
+      // find way to get name of page into database
+      // figure out how to export the nested json into a file!
+
+
+
 // simple algorithm
 	// query each tabs parent as its created and push it into the children array... shit then i have to figure out how to query for infinitely leveled children... this isnt that simlpe unfortunately.
 	// i have a method that can traverse every object from top to bottom of a json object.. hopefully it works? ill test it on fiddle
