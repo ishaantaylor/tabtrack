@@ -68,8 +68,6 @@ chrome.tabs.onRemoved.addListener( function( tab /*, {"windowID":tab.windowID, "
 });
 /**/
 
-var 
-
 /** Handle Commands **/
 chrome.commands.onCommand.addListener(function(command) {
   console.log('onCommand event received for message: ', command);
@@ -255,8 +253,8 @@ function nest(raw, nest) {
   // c = intersect(a,b);
   d = makeSortedTabIDarray(b);
 
-  for (var i in raw) {
-    if (!isIn(b[i].fromid,d)) {     // if tab fromid is NOT in d(forest ids) 
+  for (var i in raw) {            // this seems to be a problem
+    if (!isIn(b[i].fromid,d)) {     // if tab fromid is NOT in d(forest ids)  
       nest.push(b[i]);              //  then push it
     }
   }
