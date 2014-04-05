@@ -1168,6 +1168,8 @@ var root = {
 for (var i in rootboot) {
   root.children.push(rootboot[i]);
 }
+
+console.log(JSON.stringify(root));
 // initialize the display to show a few nodes.
 root.children.forEach(toggleAll);
 //toggle(root.children[1]);
