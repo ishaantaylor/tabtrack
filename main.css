@@ -2,18 +2,18 @@
  
  .node circle {
      cursor: pointer;
-     fill: #fff;
+     fill: #ccc;
      stroke: steelblue;
-     stroke-width: 2px;
+     stroke-width: 1px;
  }
  .node text {
-     font: 11px sans-serif;
+     font: 8px sans-serif;
      fill: black;
  }
  path.link {
      fill: none;
-     stroke: #ccc; 
-     stroke-width: 1.5px;
+     stroke: #fff; 
+     stroke-width: 1px;
  }
  svg {
      pointer-events: all;

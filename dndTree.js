@@ -1,4 +1,7 @@
 // Get JSON data
+
+
+
 treeJSON = d3.json("flare.json", function(error, treeData) {
  
     // Calculate total nodes, max label length
@@ -62,7 +65,7 @@ treeJSON = d3.json("flare.json", function(error, treeData) {
         });
     }
     // Sort the tree initially incase the JSON isn't in a sorted order.
-    sortTree();
+    // sortTree();
  
     // TODO: Pan function, can be better implemented.
  
