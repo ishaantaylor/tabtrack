@@ -1,3 +1,20 @@
+// 4/7/14
+  // more progress. got a type of nested json to display
+  // todo
+    // implement json file capability
+      ///
+        // create (empty) json file in wokring directyory
+        // be able to export json to this file
+        // know exactly where to get the file from and where to write it etc etc///
+    // implement file EXPORT capability
+      ///  
+        // post to server (that im holding website on)?
+        // get from server
+        // display it
+    // make thing look prsentable
+      /// fix css i guess..
+
+
 // 4/1/12
   // big progress. got nested json to work, got something to show up on the extension.
   // todo
