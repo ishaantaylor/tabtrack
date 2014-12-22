@@ -54,7 +54,11 @@ chrome.tabs.onCreated.addListener( function(tab) {
   **/
 chrome.tabs.onUpdated.addListener( function(tab) {
   var tab_record = x({"tabid":tab.id});       // tab to be updated
-  tab_record.update({"tab":tab, "url":tab.url, "title":tab.title});
+  tab_record.update({
+      "tab":tab,
+      "url":tab.url,
+      "title":tab.title
+    });
   // console.log(tab.id, tab.url);
 });
  
@@ -67,7 +71,6 @@ chrome.tabs.onRemoved.addListener( function( tab /*, {"windowID":tab.windowID, "
   x({"tabid":tab.id}).update({"removed":true});
 });
 /**/
-
 
 
 /** Handle Commands **/
@@ -152,62 +155,6 @@ function Queue() {
 }
 
 
-
-/*
-function nestReal(raw) {
-  json_new.push({"name":"root", "children":[] });  
-  var count = 0;
-  var q = new Queue();
-  // var json_new = [];
-
-  console.log("size of raw array: " + raw.length);
-  // initialize queue
-  for (var i in raw) {
-    var tab = raw[i]
-    console.log("tab: \n\t");
-    console.log(tab);
-    if (tab.fromid === undefined) {       //figure out if we use -1 or underfined
-      console.log("initial: " + tab);             // print initialized tab titles
-      q.pushh(tab);
-      count++;                            // increment count to know where i'm at
-    } 
-  }
-
-  if (q.isEmpty()) {
-
-  }
-
-  // gonna need to handle the case that the initial queueeing wont yeild things 
-      // because certian tabs arent undefined.. 
-      // that means that not all initial tabs in this tree will lead to an undefined tab. 
-          // that means taht i need to be able to tell if a tab is a parent or a child (or both ) 
-            //.. if a tab isnt a child, then it must be a praent. so I need to write in my algorithm: 
-              // assume the tab is a child until proven its not (until i cant find it in the tree or the raw data)
-  // could create a sorted array for this, but then it would take O(n) to insert and O(log n) to search (bst).
-
-
-  console.log(q.printt()); 
-  while (count < raw.length && q.peekk() !== undefined) {               // could also do while queue is not empty maybe
-    console.log("count: " + count);
-    var parent = q.popp();                            // get first tab in queue
-    console.log("parent: " + parent);
-    if (parent.fromid === undefined)
-      json_new = addToParent(json_new, parent, undefined);    //implement cases for both nodes without parent and with 
-    var children = x({"fromid": {is:parent.id}});     // get children of parent from db
-    for (var j in children) {                     // for each child to the original parent
-      var child = children[j];
-      console.log("child: " + child);
-      q.pushh(child);                                   // add children to queue
-      count++;                                          // increment count to know where i'm at
-      json_new = addToParent(json_new, parent, child);          
-    }
-  }
-  console.log(json_new.toString());
-  return json_new;
-}
-*/
-
-
 function getID(tab) {
   return tab.tabid;
 }
@@ -232,27 +179,6 @@ function isIn(integer, array) {
 }
 
 
-/*
-function getAllOpenTabs() {
-  chrome.tabs.query({}, function(tabs) {
-    return tabs;
-  });
-}
-
-
-// find each element that is present in both arrays
-// assume each array is a unique set of elements
-function intersect(a,b) {
-  // sort
-  a = a.sort();
-  b = b.sort();
-
-
-
-  var c = [];   // array of intersect
-}
-*/
-
 // some users will press ctrl+t when on tab A, creating new tree with root tab B. this wont work because ctrl+t doesnt make the tab undefined
 /// thus, what I need to do is attach a boolean property called "root" to each tab. if true, initially push into json, else..dont
 function nest(raw) {
@@ -274,8 +200,6 @@ function nest(raw) {
     }
   }
 
-  //
-  // recursive part
   for (var j in nested_data) {
     addChildren(nested_data[j]);
   }
@@ -288,51 +212,13 @@ function addChildren(tab) {
   if (tab === undefined || tab.tabid === undefined)
     return;
   var childs = x({fromid:{is:tab.tabid}});    
-  // console.log(childs.stringify());    
   var json_children = $.parseJSON(childs.stringify()); 
+  
   // updatecurrent tab with those children
   tab.children = json_children;
 
-  /// for each of those children, call this function again.....
+  // for each of those children, add children
   for (var k in json_children) {
     addChildren(childs[k]);
   }
 }
-
-
-/* takes in current json, parent tab and child tab - edits the tab object (which automatically edits json)
-function addToParent(json, parent, child) {
-  if (child === undefined) {
-    json.push(parent);
-  } else {
-    var parent_tab = searchForTabWithID(json, parent.id);  // implement me
-    var child_tab  = searchForTabWithID(json, child.id);
-    if (parent_tab !== undefined)                           
-      parent_tab.children.push(child_tab);
-  }
-  return json;
-}
-
-
-// returns tab object found to function addToParent()
-function searchForTabWithID(obj, id) {
-  if (id === undefined)            // if tab id doesnt exist, return undefined
-    return undefined;
-
-  if (obj.id == id)                // if tab is the object, return it
-    return obj; 
-
-  
-  for (var j in obj.children) {
-    if (obj.children[j].id == id)  // if the id of the field is the correct id (fix bug)
-      return obj;
-  }
-
-  // if the immediate children don't return anything, check the childrens' children.
-  for (var j in obj.children) {
-    if (typeof(obj[i]) == "object")
-        searchForTabWithID(obj.children[j], id);
-                                  // recurse
-  }
-}
-*/

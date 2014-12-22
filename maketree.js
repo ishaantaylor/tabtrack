@@ -1,45 +1,5 @@
 // maketree.js
 
-/* change in plans. just track historyt until user wants to see tree constructed by pressing icon
-must:
-    keep updated list of tabs and    */
-    
-    
-// background script will query database to create tree when user clicks icon or whatever
-
-
-// var on = false;
-
-
-
-/* makes extension active or inactive with click of icon
-chrome.browserAction.onClicked.addListener( function(tab) {
-  on = !on;   // turn it "on" or "off"
-  if (on) {   // check if it's already on
-    window.console.log("on");
-    //initialize tree if new tab
-    var tree = createTree(tab);
-    chrome.tabs.onCreated.addListener( function(tab) {
-      window.console.log(tab.id + ":"+ tab.url +":" + tab.openerTabId);
-      if (tab.openerTabId !== null) {            //call function to add node to tree
-      } else if (tab.openerTabId === null) {     //or start new tree
-        
-      }
-    });
-    chrome.tabs.onUpdated.addListener( function(tab) {
-      //call function to update info for existing node in tree
-    });
-  } else {
-    
-    //remove all listeners ive added
-    chrome.tabs.onCreated.removeListener( function() {
-      //whatever i wanna do..export the tree json maybe?
-    });
-    window.console.log("off");
-  }
-});
-*/
-
 function collapse(d) {
   if (d.children) {
     d._children = d.children;
@@ -116,7 +76,7 @@ zb.translate([margin.left, margin.top]);
 
 // appends string to background or popup page html with ajax
 /*
-I don't NEED this.. so why have it at this point?
+I don't NEED this at this point?
 function apend(string) {
     window.console.log(string);
     $("container").append("<p>"+string+"</p>\n");
@@ -134,11 +94,6 @@ on create new tab from any source, 3 cases
     use data to create tree node in (2 cases) proper place
       new tree - no parent
       same tree - under parent
-*/
-
-/*
-Must create
-*
 
 $(document).ready(function(){
   console.log(x().stringify());
